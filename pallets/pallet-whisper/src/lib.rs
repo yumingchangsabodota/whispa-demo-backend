@@ -33,7 +33,7 @@ pub mod pallet {
 	#[scale_info(skip_type_params(T))]
 	#[cfg_attr(feature = "std", derive(Debug))]
 	pub struct WhispDetail<T: Config>{
-		pub gossip_id: [u8;16],
+		pub whash: [u8;16],
 		pub whisper: T::AccountId,
 		pub timestamp: u128,
 		pub content: Vec<u8>,
@@ -78,7 +78,7 @@ pub mod pallet {
 			let mut new_vec = [now_vec.clone(), content.clone()].concat();
 			let hash =  blake2_128(&mut new_vec);
 			let whsp = WhispDetail::<T>{
-				gossip_id: hash.clone(),
+				whash: hash.clone(),
 				whisper: caller.clone(),
 				timestamp: now.clone(),
 				content: content.clone(),

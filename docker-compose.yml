@@ -1,17 +1,14 @@
 version: "3.2"
 
 services:
-  dev:
-    container_name: node-template
-    image: paritytech/ci-linux:974ba3ac-20201006
-    working_dir: /var/www/node-template
+  whispa-node:
+    container_name: whisp-node
+    image: docker.io/library/whisp-node-backend
+    working_dir: /whispa-node
     ports:
       - "9944:9944"
-    environment:
-      - CARGO_HOME=/var/www/node-template/.cargo
+    #environment:
+    #  - CARGO_HOME=/var/www/node-template/.cargo
     volumes:
-      - .:/var/www/node-template
-      - type: bind
-        source: ./.local
-        target: /root/.local
-    command: bash -c "cargo build --release && ./target/release/node-template --dev --ws-external"
+      - /Users/YMChang/Desktop/Projects/substrate-node/whispa/substrate-node-template/chain-state:/whispa-node/chain-state
+    command: ./target/release/node-template --base-path ./chain-state/alice --chain dev --alice --ws-external --port 30333 --ws-port 9944 --rpc-port 9933 --node-key 0000000000000000000000000000000000000000000000000000000000000001 --telemetry-url "wss://telemetry.polkadot.io/submit/ 0"
