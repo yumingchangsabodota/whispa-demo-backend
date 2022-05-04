@@ -1,14 +1,50 @@
 version: "3.2"
 
 services:
-  whispa-node:
-    container_name: whisp-node
+  alice:
+    container_name: node-alice
     image: docker.io/library/whisp-node-backend
     working_dir: /whispa-node
-    ports:
-      - "9944:9944"
+    network_mode: "host"
+    expose:
+      - "30333"
+      - "9944"
+      - "9933"
     #environment:
     #  - CARGO_HOME=/var/www/node-template/.cargo
     volumes:
       - /Users/YMChang/Desktop/Projects/substrate-node/whispa/substrate-node-template/chain-state:/whispa-node/chain-state
-    command: ./target/release/node-template --base-path ./chain-state/alice --chain dev --alice --ws-external --port 30333 --ws-port 9944 --rpc-port 9933 --node-key 0000000000000000000000000000000000000000000000000000000000000001 --telemetry-url "wss://telemetry.polkadot.io/submit/ 0"
+    command: ./target/release/node-template --base-path ./chain-state/alice --chain local --alice --port 30333 --ws-port 9944 --rpc-port 9933 --node-key 0000000000000000000000000000000000000000000000000000000000000001 --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" --validator
+
+  bob:
+    container_name: node-bob
+    image: docker.io/library/whisp-node-backend
+    working_dir: /whispa-node
+    network_mode: "host"
+    expose:
+      - "30334"
+      - "9945"
+      - "9934"
+    #environment:
+    #  - CARGO_HOME=/var/www/node-template/.cargo
+    volumes:
+      - /Users/YMChang/Desktop/Projects/substrate-node/whispa/substrate-node-template/chain-state:/whispa-node/chain-state
+    command: ./target/release/node-template --base-path ./chain-state/bob --chain local --bob --port 30334 --ws-port 9945 --rpc-port 9934 --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/12D3KooWEyoppNCUx8Yx66oV9fJnriXwCcXwDDUA2kj6vnc6iDEp --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" --validator
+
+  fontend-dev:
+    container_name: node-fontend-dev
+    image: docker.io/library/whisp-node-backend
+    working_dir: /whispa-node
+    ports:
+      - "30335:30335"
+      - "9946:9946"
+      - "9935:9935"
+    expose:
+      - "30335"
+      - "9946"
+      - "9935"
+    #environment:
+    #  - CARGO_HOME=/var/www/node-template/.cargo
+    volumes:
+      - /Users/YMChang/Desktop/Projects/substrate-node/whispa/substrate-node-template/chain-state:/whispa-node/chain-state
+    command: ./target/release/node-template --base-path ./chain-state/dev-chain --chain local --dave --ws-external --port 30335 --ws-port 9946 --rpc-port 9935 --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/12D3KooWEyoppNCUx8Yx66oV9fJnriXwCcXwDDUA2kj6vnc6iDEp --telemetry-url "wss://telemetry.polkadot.io/submit/ 0"

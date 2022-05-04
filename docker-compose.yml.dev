@@ -1,0 +1,17 @@
+version: "3.2"
+
+services:
+
+  dev-chain:
+      container_name: dev-chain
+      image: docker.io/library/whisp-node-backend
+      working_dir: /whispa-node
+      ports:
+        - "9946:9946"
+      expose:
+        - "9946"
+      #environment:
+      #  - CARGO_HOME=/var/www/node-template/.cargo
+      volumes:
+        - /Users/YMChang/Desktop/Projects/substrate-node/whispa/substrate-node-template/chain-state:/whispa-node/chain-state
+      command: ./target/release/node-template --base-path ./chain-state/dev-chain --chain dev --alice --ws-external --port 30333 --ws-port 9946 --rpc-port 9933 --node-key 0000000000000000000000000000000000000000000000000000000000000001 --telemetry-url "wss://telemetry.polkadot.io/submit/ 0"
